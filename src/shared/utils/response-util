@@ -1,0 +1,18 @@
+// src\shared\utils\response-util
+
+// Define an object to encapsulate response utility functions
+const ResponseUtil = {
+  // Function to send a success response
+  respondOk: (res, data, message) => {
+    // Send a JSON response with a success type, data, and message
+    res.json({ type: 'success', data, message });
+  },
+  // Function to send an error response
+  respondError: (res, data, message) => {
+    // Send a JSON response with an error type, data, and message
+    res.json({ type: 'error', data, message });
+  }
+};
+
+// Export the ResponseUtil object for use in other parts of the application
+module.exports = { ResponseUtil };
