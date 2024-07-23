@@ -19,6 +19,7 @@ const openMongoConnection = () => {
     });
     
     // Connect to MongoDB using the URI from environment variables
+    console.log(process.env.MONGO_URI)
     mongoose.connect(process.env.MONGO_URI);
 };
 

@@ -1,7 +1,7 @@
 // src\routes\health.routes.js
 
 // Import the HealthController to handle health-related routes
-const HealthController = require('../features/health/health.controller');
+const HealthController = require('../controllers/health.controller');
 
 // Function to register health-related routes
 const registerHealthRoutes = (app) => {

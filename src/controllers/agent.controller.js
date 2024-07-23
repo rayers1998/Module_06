@@ -1,7 +1,7 @@
 // src\controllers\agent.controller.js
 
 // Importing the Agent schema to interact with the MongoDB collection
-const Agent = require('../../shared/db/mongodb/schemas/agent.Schema');
+const Agent = require('../shared/db/mongodb/schemas/agent.Schema');
 // Importing the asyncWrapper utility to handle asynchronous functions
 const asyncWrapper = require('../shared/util/base-utils');
 

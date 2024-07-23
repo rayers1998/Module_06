@@ -3,7 +3,7 @@
 require('dotenv').config();   // Load environment variables from a .env file
 const express = require('express');  // Import Express framework
 const cors = require('cors'); // Import CORS to allow cross-origin requests
-const chalk = require('chalk');  // Import Chalk for colored console logs
+//const chalk = require('chalk');  // Import Chalk for colored console logs
 const app = express();  // Create an Express application
 const port = process.env.PORT || 3004; // Define the port to run the server on
 
@@ -48,7 +48,7 @@ MongoManager.openMongoConnection();
 
 // Start the server and listen for requests on the specified port
 app.listen(port, () => {
-    console.log(chalk.green(`Server is listening on port ${port}`));
+    console.log(`Server is listening on port ${port}`);
 });
 
 

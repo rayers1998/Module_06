@@ -8,7 +8,7 @@ const Data = require('../shared/resources/data');
 const ContactUs = require('../shared/db/mongodb/schemas/contactUs.Schema'); 
 
 // Importing the validator function ('validateBuildingType'). 
-const { validateBuildingType } = require('../shared/util/validators'); 
+// const { validateBuildingType } = require('../shared/util/validators'); 
 
 /**
  * Handles contact form submissions.

@@ -1,7 +1,7 @@
 // src\routes\region.routes.js
 
 
-const RegionController = require('../features/region/region.controller'); // Import the RegionController to handle region-related routes
+const RegionController = require('../controllers/region.controller.js'); // Import the RegionController to handle region-related routes
 
 // Function to register region-related routes
 const registerRegionRoutes = (app) => {

@@ -16,8 +16,8 @@ const generateToken = (user) => {
 };
 
 // Signup endpoint
-exports.signup = async (req, res) => {
-  const { username, password } = req.body;
+const signup = async (req, res) => {
+ const { username, password } = req.body;
   try {
     const existingUser = await User.findOne({ username });
     if (existingUser) {
@@ -36,7 +36,7 @@ exports.signup = async (req, res) => {
 };
 
 // Login endpoint
-exports.login = async (req, res) => {
+const login = async (req, res) => {
   const { username, password } = req.body;
   try {
     const user = await User.findOne({ username });
@@ -58,7 +58,7 @@ exports.login = async (req, res) => {
 };
 
 // Logout endpoint
-exports.logout = (req, res) => {
+const logout = (req, res) => {
     // For stateless JWT, this could just inform the client to delete the token
     res.status(200).json({ message: 'Logged out successfully' });
   };
@@ -76,4 +76,5 @@ function authenticateToken(req, res, next) {
   });
 }
 
-exports.authenticateToken = authenticateToken;
+
+module.exports={ signup, login, logout }

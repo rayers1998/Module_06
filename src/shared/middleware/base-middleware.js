@@ -10,7 +10,7 @@
 
 require('dotenv').config();  // Load environment variables from a .env file
 const Express = require('express');  // Import the Express library
-const chalk = require('chalk'); // Import the Chalk library for colored console logs
+//const chalk = require('chalk'); // Import the Chalk library for colored console logs
 const jwt = require('jsonwebtoken'); // Import the JSON Web Token library for handling JWTs
 
 // List of admin routes that require special handling
