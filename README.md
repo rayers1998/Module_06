@@ -5,22 +5,30 @@ PORT=3004
 JWT_SECRET=jsonwebtoken
 ENV_NAME=local
 
-Dependencies
--"dotenv": "^16.0.3"
--"express": "^4.18.2"
--"jsonwebtoken": "^9.0.0"
--"mongoose": "^6.9.1"
--"sinon": "^15.0.1"
--"validator": "^13
-devDependencies
--"chai": "^4.3.7"
--"chai-http": "^4.3.0"
--"mocha": "^10.2.0"
--"nodemon": "^2.0.20"
+ #### Dependencies
+    "bcrypt": "^5.1.1",
+    "chalk": "^5.3.0",
+    "cors": "^2.8.5",
+    "dotenv": "^16.0.3",
+    "express": "^4.19.2",
+    "express-validator": "^7.1.0",
+    "jsonwebtoken": "^9.0.2",
+    "mongodb": "^6.8.0",
+    "mongoose": "^6.9.1",
+    "sinon": "^15.0.1",
+    "validator": "^13.12.0"
+  
+  #### devDependencies
+    "chai": "^4.3.7",
+    "chai-http": "^4.3.0",
+    "mocha": "^10.2.0",
+    "nodemon": "^2.0.20"
+
 TECH WE WILL BE USING FOR TESTING
 -Mocha JS - A framework
 -Chai - A library
 -Sinon JS - Tool to mock external calls
+
 In Module 6, UNIT TESTING is key part of our testing strategy. UNIT TESTING is software testing that evaluate different aspects of an application. UNIT TESTING tests individual parts of an application separately. It's a method where developers check each part of the code to ensure it works correctly. This type of testing involves looking at the actual code. Upon researching, I've summarized below why UNIT TESTING is more important than other types of testing.
 
 QUICK FEEDBACK Unit tests give immediate feedback on code changes, helping developers find and fix errors early in the development process. This makes coding faster and reduces the time spent on debugging and manual testing.
