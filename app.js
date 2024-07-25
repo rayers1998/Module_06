@@ -22,7 +22,7 @@ const middleWare = require('./src/shared/middleware/base-middleware');
 middleWare.registerBaseMiddleWare(app);
 
 // Function to set up routes
-const registerRoutes = () => {
+
     // Import route handlers
     const loginRoutes = require('./src/routes/login.routes');
     const healthRoutes = require('./src/routes/health.routes');
@@ -38,10 +38,8 @@ const registerRoutes = () => {
     publicRoutes.registerPublicRoutes(app);
     regionRouter.registerRegionRoutes(app);
     app.use('/api', agentRoutes);
-};
 
-// Register all routes
-registerRoutes();
+
 
 // Connect to Mongodb
 MongoManager.openMongoConnection();

@@ -21,19 +21,19 @@ const adminRoutes = [
 ];
 
 // Middleware for logging API calls with colors
-const coloredLogger = (req, res, next) => {  
-  const timestamp = chalk.blue(new Date().toLocaleString('en-CA', { timeZone: 'America/New_York' })); // Create a timestamp with a specific format and time zone
-  const method = req.method; // Get the HTTP method of the request (GET, POST, etc.)
-  const methodColor = method === 'GET' ? chalk.green :  // Choose a color based on the HTTP method
-                      method === 'POST' ? chalk.blue :
-                      method === 'DELETE' ? chalk.red : chalk.yellow;
-  const methodStyled = methodColor.bold(method);  // Style the method text with the chosen color
-  const urlStyled = chalk.cyan(req.originalUrl);  // Style the URL text
-  const timezone = 'Eastern Daylight Time'; // Define the time zone for logging
+// /const coloredLogger = (req, res, next) => {  
+//   const timestamp = chalk.blue(new Date().toLocaleString('en-CA', { timeZone: 'America/New_York' })); // Create a timestamp with a specific format and time zone
+//   const method = req.method; // Get the HTTP method of the request (GET, POST, etc.)
+//   const methodColor = method === 'GET' ? chalk.green :  // Choose a color based on the HTTP method
+//                       method === 'POST' ? chalk.blue :
+//                       method === 'DELETE' ? chalk.red : chalk.yellow;
+//   const methodStyled = methodColor.bold(method);  // Style the method text with the chosen color
+//   const urlStyled = chalk.cyan(req.originalUrl);  // Style the URL text
+//   const timezone = 'Eastern Daylight Time'; // Define the time zone for logging
 
-  console.log(`API call: ${methodStyled} ${urlStyled} at ${timestamp} [${timezone}]`);  // Print the log message with colored method and URL
-  next();  // Move on to the next middleware function
-};
+//   console.log(`API call: ${methodStyled} ${urlStyled} at ${timestamp} [${timezone}]`);  // Print the log message with colored method and URL
+//   next();  // Move on to the next middleware function
+// };
 
 // Middleware to check JWT token for specific routes
 const checkAuthToken = (req, res, next) => {
@@ -62,14 +62,14 @@ const checkAuthToken = (req, res, next) => {
     if (authHeader && authHeader.startsWith('Bearer ')) { // Check if the header exists and starts with 'Bearer '
       const token = authHeader.substring(7); // Extract the token from the header
     
-      
-      jwt.verify(token, process.env.JWT_SECRET, (err, decoded) => {   //  Verify the token using the secret key  
-          if (err) { 
-          return res.status(403).json({ message: 'Forbidden: Invalid token' }); // If there's an error verifying the token, respond with Forbidden
-        }
-        req.user = decoded; // If the token is valid, attach the decoded user info to the request
-        next();  // Move on to the next middleware function
-      });
+      if(token==process.env.JWT_SECRET){next}
+      // jwt.verify(token, process.env.JWT_SECRET, (err, decoded) => {   //  Verify the token using the secret key  
+      //     if (err) { 
+      //     return res.status(403).json({ message: 'Forbidden: Invalid token' }); // If there's an error verifying the token, respond with Forbidden
+      //   }
+      //   req.user = decoded; // If the token is valid, attach the decoded user info to the request
+      //   next();  // Move on to the next middleware function
+      // });
     } else {
         return res.status(401).json({ message: 'Authorization header is required and must be in the format Bearer <token>' });  // If the Authorization header is missing or invalid, respond with Unauthorized
     }
@@ -82,7 +82,7 @@ const checkAuthToken = (req, res, next) => {
 const registerBaseMiddleWare = (app) => {
   
   app.use(Express.json());  // Parse JSON bodies in incoming requests
-  app.use(coloredLogger);  // Apply the colored logging middleware
+  // app.use(coloredLogger);  // Apply the colored logging middleware
   app.use(checkAuthToken); // Apply the JWT check middleware
 };
 

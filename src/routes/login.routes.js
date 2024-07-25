@@ -16,4 +16,11 @@ const loginRouter = (app)=> {app.post('/signup', LoginController.signup);
   });
 
 }
+
+// // Logout route
+// router.get('/logout', (req, res) => {
+//   // In a real application you might blacklist the token or just inform the client
+//   res.status(200).send({ message: "Logged out successfully" });
+// });
+
 module.exports = loginRouter;

@@ -1,5 +1,8 @@
-mongodb=mongodb+srv://rayers1998:Ivy2020!@cluster0.24bfftf.mongodb.net/Module_5?retryWrites=true&w=majority&appName=Cluster0
+mongodb=mongodb+srv://rayers1998:Jenna623@cluster0.24bfftf.mongodb.net/Module_5?retryWrites=true&w=majority&appName=Cluster0
 
+github: https://github.com/rayers1998/Module_06
+
+youtube: Download O.BS to video on youtube for all future modules.
 
 PORT=3004
 
