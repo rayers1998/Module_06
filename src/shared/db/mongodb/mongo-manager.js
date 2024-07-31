@@ -6,28 +6,29 @@ const mongoose = require('mongoose');
 require('dotenv').config();
 
 // Function to open a connection to the MongoDB database
-const openMongoConnection = () => {
-    // Get the connection object from Mongoose
-    const db = mongoose.connection;
-    
-    // Log an error message if there's an error connecting to MongoDB
-    db.on('error', console.error.bind(console, 'connection error:'));
-    
-    // Log a success message once the connection is successfully opened
-    db.once('open', function callback () {
-        console.log("Connected to MongoDB");
-    });
-    
-    // Connect to MongoDB using the URI from environment variables
-    console.log(process.env.MONGO_URI)
-    mongoose.connect(process.env.MONGO_URI);
+const openMongoConnection = async () => {
+    const options = {
+        useNewUrlParser: true,
+        useUnifiedTopology: true,
+        serverSelectionTimeoutMS: 0, // No server selection timeout
+        socketTimeoutMS: 0, // No socket timeout
+    };
+
+    const connectWithRetry = async () => {
+        try {
+            await mongoose.connect(process.env.MONGO_URI, options);
+            console.log("Connected to MongoDB");
+        } catch (error) {
+            console.error('MongoDB connection error:', error);
+            console.log('Retrying connection in 5 seconds...');
+            setTimeout(connectWithRetry, 5000); // Retry connection after 5 seconds
+        }
+    };
+
+    connectWithRetry();
 };
 
 // Only allow fields defined in the schema when querying
 mongoose.set('strictQuery', true);
 
-
 module.exports = { openMongoConnection };
-
-
-

@@ -1,7 +1,5 @@
 // app.js
 
-// app file ensure that your middleware is correctly registered in your app.js file.
-
 require('dotenv').config();   // Load environment variables from a .env file
 const express = require('express');  // Import Express framework
 const cors = require('cors'); // Import CORS to allow cross-origin requests
@@ -27,22 +25,20 @@ app.use(express.json());
 const middleWare = require('./src/shared/middleware/base-middleware');
 middleWare.registerBaseMiddleWare(app);
 
-// Function to set up routes
-
 // Import route handlers
 const loginRoutes = require('./src/routes/login.routes');
 const healthRoutes = require('./src/routes/health.routes');
 const adminRoutes = require('./src/routes/admin.routes');
 const publicRoutes = require('./src/routes/public.routes');
-const regionRouter = require('./src/routes/region.routes');
+const regionRoutes = require('./src/routes/region.routes');
 const agentRoutes = require('./src/routes/agent.routes');
 
 // Applying route prefixes to structure API endpoints for improved clarity and organization
-app.use('/api/login', loginRoutes);
+app.use('/api', loginRoutes);
 healthRoutes.registerHealthRoutes(app);
 adminRoutes.registerAdminRoutes(app);
 publicRoutes.registerPublicRoutes(app);
-regionRouter.registerRegionRoutes(app);
+regionRoutes.registerRegionRoutes(app);
 app.use('/api', agentRoutes);
 
 // Connect to MongoDB
@@ -50,6 +46,7 @@ MongoManager.openMongoConnection();
 
 // Start the server and listen for requests on the specified port
 app.listen(port, () => {
-    console.log(`Server is listening on port ${port}`);
+  console.log(`Server is listening on port ${port}`);
 });
+
 

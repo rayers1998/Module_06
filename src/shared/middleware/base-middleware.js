@@ -5,6 +5,7 @@
 require('dotenv').config();  // Load environment variables from a .env file
 const Express = require('express');  // Import the Express library
 const jwt = require('jsonwebtoken'); // Import the JSON Web Token library for handling JWTs
+const cors = require('cors'); // Import CORS for handling cross-origin requests
 
 // List of admin routes that require special handling
 const adminRoutes = [
@@ -17,7 +18,7 @@ const adminRoutes = [
 const checkAuthToken = (req, res, next) => {
   // Adjust this list to include routes that require JWT authentication
   const jwtProtectedRoutes = [
-    '/api/agent-create', 
+   // '/api/agent-create', 
     '/api/region', 
     /* '/api/agents', Uncomment to protect the agents route */
     '/api/agent-update-info', 
@@ -57,8 +58,10 @@ const checkAuthToken = (req, res, next) => {
 // Function to register the base middleware for the app
 const registerBaseMiddleWare = (app) => {
   app.use(Express.json());  // Parse JSON bodies in incoming requests
+  app.use(cors()); // Enable CORS for all routes
   app.use(checkAuthToken); // Apply the JWT check middleware
 };
 
 // Export the function to register base middleware
 module.exports = { registerBaseMiddleWare };
+

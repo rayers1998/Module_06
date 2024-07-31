@@ -1,9 +1,7 @@
-// src\shared\db\mongodb\schemas\userSchema.js
+// src/shared/db/mongodb/schemas/userSchema.js
 
-// Importing the mongoose module to interact with MongoDB
 const mongoose = require('mongoose');
 
-// Create a schema for the User collection in MongoDB
 const userSchema = new mongoose.Schema({
   username: {
     type: String,

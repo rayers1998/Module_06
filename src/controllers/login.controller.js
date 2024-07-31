@@ -1,23 +1,23 @@
-// src\controllers\login.controller.js
+// src/controllers/login.controller.js
 
 const express = require('express');
-const router = express.Router();
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
-const User = require('../shared/db/mongodb/schemas/userSchema'); 
+const User = require('../shared/db/mongodb/schemas/userSchema');
+const Agent = require('../shared/db/mongodb/schemas/agent.Schema'); // Import Agent schema
 
 // Function to generate JWT token with user data and expiration
 const generateToken = (user) => {
   return jwt.sign(
-    { username: user.username, userId: user._id },
+    { username: user.username, email: user.email, userId: user._id },
     process.env.JWT_SECRET,
     { expiresIn: "1d" } // Token expires in 1 day
   );
 };
 
-// Signup endpoint
+// Signup endpoint for Users
 const signup = async (req, res) => {
- const { username, password } = req.body;
+  const { username, password } = req.body;
   try {
     const existingUser = await User.findOne({ username });
     if (existingUser) {
@@ -35,7 +35,7 @@ const signup = async (req, res) => {
   }
 };
 
-// Login endpoint
+// Login endpoint for Users
 const login = async (req, res) => {
   const { username, password } = req.body;
   try {
@@ -57,11 +57,38 @@ const login = async (req, res) => {
   }
 };
 
+// Login endpoint for Agents
+const loginAgent = async (req, res) => {
+  const { email, password } = req.body;
+  try {
+    const agent = await Agent.findOne({ email });
+    if (!agent) {
+      return res.status(401).json({ message: "Authentication failed" });
+    }
+
+    const isValid = await bcrypt.compare(password, agent.password);
+    if (!isValid) {
+      return res.status(401).json({ message: "Authentication failed" });
+    }
+
+    const token = jwt.sign(
+      { email: agent.email, userId: agent._id },
+      process.env.JWT_SECRET,
+      { expiresIn: "1d" } // Token expires in 1 day
+    );
+
+    res.status(200).json({ token, expiresIn: 86400, userId: agent._id }); // Sending token with expiration and user ID
+  } catch (error) {
+    console.error('Login Error:', error);
+    res.status(500).json({ message: "Authentication failed" });
+  }
+};
+
 // Logout endpoint
 const logout = (req, res) => {
-    // For stateless JWT, this could just inform the client to delete the token
-    res.status(200).json({ message: 'Logged out successfully' });
-  };
+  // For stateless JWT, this could just inform the client to delete the token
+  res.status(200).json({ message: 'Logged out successfully' });
+};
 
 // Middleware to verify JWT token for protected routes
 function authenticateToken(req, res, next) {
@@ -76,5 +103,5 @@ function authenticateToken(req, res, next) {
   });
 }
 
+module.exports = { signup, login, loginAgent, logout, authenticateToken };
 
-module.exports={ signup, login, logout }
