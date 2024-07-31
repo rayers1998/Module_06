@@ -16,21 +16,6 @@ const getAllAgents = asyncWrapper(async (req, res) => {
    res.status(200).json({ data: agents });  // Responding with the sorted agents data
 });
 
-//  Controller function to get agents by region
-// const getAgentsByRegion = asyncWrapper(async (req, res) => {
-//   Extracting the region from the query parameters
-//   const { region } = req.query;
-//   Finding agents in the specified region
-//   const agents = await Agent.find({ region: region.toLowerCase() });
-  
-//   Checking if no agents were found in the specified region
-//   if (!agents.length) {
-//     return res.status(404).json({ message: `No agents found in ${region}` });
-//   }
-
-//    Responding with the agents found in the specified region
-//   res.status(200).json({ data: agents });
-// });
 
 // Controller function to update agent information by ID
 const updateAgentInfo = asyncWrapper(async (req, res) => { // Extracting the agent ID from the request parameters
@@ -68,7 +53,6 @@ const deleteAgent = asyncWrapper(async (req, res) => {
 module.exports = {
   createAgent,
   getAllAgents,
-  // getAgentsByRegion,
   updateAgentInfo,
   deleteAgent,
 };

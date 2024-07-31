@@ -1,31 +1,27 @@
 // src/shared/middleware/validators/regionValidator.js
 
-
-// List of valid regions
+// List of valid regions the middleware checks against.
 const validRegions = ['north', 'south', 'east', 'west'];
 
-// Middleware to validate the 'region' query parameter
+// Middleware function extracts the 'region' query parameter from the incoming request.
 const validateRegion = (req, res, next) => {
   const { region } = req.query;
 
-  // Check if the 'region' query parameter is provided
+  // Checks if the 'region' is provided.
   if (!region) {
-    // Respond with a 400 status code if 'region' is missing
+    // If the reion query parameter is missing, the middleware reponds a with a 400 status code.
     return res.status(400).json({ message: 'Region query parameter is required' });
   }
 
-//   Check if the provided 'region' is in the list of valid regions
-//   if (!validRegions.includes(region.toLowerCase())) {
-//     // Respond with a 400 status code if 'region' is invalid
-//     return res.status(400).json({ message: 'Invalid region specified' });
-//   }
+  // Checks if the 'region' is valid.
+  if (!validRegions.includes(region.toLowerCase())) {
+    // If the provided region is not in the list of valid regions, the middleware responds with a 400 status code.
+    return res.status(400).json({ message: 'Invalid region specified' });
+  }
 
-//   Proceed to the next middleware or route handler if 'region' is valid
-//   next();
-// };
+  // If the region is valid, the middleware calls next() to pass control to the next middleware function or route handler.
+  next();
+};
 
 // Export the validateRegion middleware for use in other files
-module.exports = validateRegion;
-
-
-
+module.exports = { validateRegion };

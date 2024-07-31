@@ -31,6 +31,36 @@
 
 		<link rel="stylesheet" href="./assets/css/residential.css">
     	
+		<style>
+			.blueBorderButton {
+				border: #0a65a0;
+			}
+		</style>
+	
+		<style>
+			table {
+				width: 100%;
+				border-collapse: collapse;
+			}
+			th, td {
+				border: 1px solid #ddd;
+				padding: 8px;
+			}
+			th {
+				background-color: #f2f2f2;
+				text-align: left;
+			}
+			tr:nth-child(even) {
+				background-color: #f9f9f9;
+			}
+			tr:hover {
+				background-color: #ddd;
+			}
+		</style>
+
+
+
+
 	</head>
 
 	<body class="smoothscroll enable-animation">
@@ -450,8 +480,8 @@
     <h2 class="heading-title text-center">Top Agent Rated</h2>
 
     <div class="container">
-        <table id="top-rated-agents" class="agents-table">
-            <thead>
+        <table id="top-rated-agents" class="top-rated-agents">
+			<thead id="agents-table-head">
                 <tr>
                     <th scope="col">#</th>
                     <th scope="col" class="sortable" data-key="full_name" data-order="asc">Full Name</th>
@@ -469,12 +499,17 @@
                     </th>
                 </tr>
             </thead>
-            <tbody>
+			<tbody id="agents-table-body">
+		
                 <!-- JavaScript will dynamically populate table rows here using  -->
             </tbody>
         </table>
     </div>
 </section>
+
+
+   
+
 
 <!----------------------------------- /MODULE 6 AGENT TABLE END ----------------------------------------------------->
 
@@ -572,6 +607,7 @@
 
 		<!-- SCRIPT -->
 		<script src="assets/js/scripts.js"></script>
+		<script src="assets/js/agent-table.js"></script>
 
 		<!-- OPEN MODALS SCRIPT -->
 		<script type="text/javascript">
@@ -581,145 +617,6 @@
 				this.reset();
 			});
 		</script>
-
-
-		 <!-- INCLUDE DATA SCRIPT -->
-		 <script src="src/shared/resources/data.js"></script>
-
-		 <!-- SCRIPT TO DYNAMICALLY POPULATE TABLE ROWS -->
-		 <script type="text/javascript">
-			 const { agents } = window;
-	 
-			 function populateTable(data) {
-				 const tableBody = document.querySelector('#top-rated-agents tbody');
-				 tableBody.innerHTML = ''; // Clear existing table rows
-	 
-				 data.forEach((item, index) => {
-					 const row = document.createElement('tr');
-	 
-					 // Create and append cells to the row
-					 const cellIndex = document.createElement('td');
-					 cellIndex.textContent = index + 1;
-					 row.appendChild(cellIndex);
-	 
-					 const cellFullName = document.createElement('td');
-					 cellFullName.textContent = `${item.first_name} ${item.last_name}`;
-					 row.appendChild(cellFullName);
-	 
-					 const cellFee = document.createElement('td');
-					 cellFee.textContent = item.fee;
-					 row.appendChild(cellFee);
-	 
-					 const cellRating = document.c"bcrypt": "^5.1.1",
-    "chalk": "^5.3.0",
-    "cors": "^2.8.5",
-    "dotenv": "^16.0.3",
-    "express": "^4.19.2",
-    "express-validator": "^7.1.0",
-    "jsonwebtoken": "^9.0.2",
-    "mongodb": "^6.8.0",
-    "mongoose": "^6.9.1",
-    "sinon": "^15.0.1",
-    "validator": "^13.12.0"
-  },
-  "devDependencies": {
-    "chai": "^4.3.7",
-    "chai-http": "^4.3.0",
-    "mocha": "^10.2.0",
-    "nodemon": "^2.0.20"reateElement('td');
-					 cellRating.textContent = item.rating;
-					 row.appendChild(cellRating);
-	 
-					 const cellRegion = document.createElement('td');
-					 cellRegion.textContent = item.region;
-					 row.appendChild(cellRegion);
-	 
-					 tableBody.appendChild(row);
-				 });
-			 }
-	 
-			 // Call the function to populate the table with data
-			 populateTable(agents);
-	 
-			 // Function to filter and display agents based on selected region
-			 function filterAndDisplayAgents() {
-				 const filter = document.getElementById('region-filter').value;
-				 const filteredData = filter ? agents.filter(agent => agent.region === filter) : agents;
-				 populateTable(filteredData);
-			 }
-		 </script>
-
-<!-- MODULE 6 - INCLUDE DATA SCRIPT -->
-<script src="src/shared/resources/data.js"></script>
-
-<!-- MODULE 6 - SCRIPT TO DYNAMICALLY POPULATE TABLE ROWS -->
-<script type="text/javascript">
-    // Import the 'agents' data from the 'data.js' file
-    const { agents } = window;
-
-    // Function to populate the table with agent data
-    function populateTable(data) {
-        const tableBody = document.querySelector('#top-rated-agents tbody');
-        tableBody.innerHTML = ''; // Clear existing table rows
-
-        // Iterate through the data array to create table rows. This indicates the start of the loop through the data array. 
-        data.forEach((item, index) => {
-            const row = document.createElement('tr');
-
-            // Create and append the full name cell to the row
-            const cellFullName = document.createElement('td');
-            cellFullName.textContent = `${item.first_name} ${item.last_name}`;
-            row.appendChild(cellFullName);
-
-            // Create and append the rating cell to the row with color coding
-            const cellRating = document.createElement('td');
-            cellRating.textContent = item.rating;
-            if (item.rating == 100) {
-                cellRating.style.color = 'green';
-            } else if (item.rating >= 90) {
-                cellRating.style.color = 'blue';
-            } else {
-                cellRating.style.color = 'purple';
-            }
-            row.appendChild(cellRating);
-
-            // Create and append the fee cell to the row in currency format
-            const cellFee = document.createElement('td');
-            cellFee.textContent = `$${parseInt(item.fee).toLocaleString()}`;
-            row.appendChild(cellFee);
-
-            // Append the row to the table body
-            tableBody.appendChild(row);
-        });
-    }
-
-    // Initial call to populate the table with all agent data
-    populateTable(agents);
-
-    // Function to filter and display agents based on the selected region
-    function filterAndDisplayAgents() {
-        const filter = document.getElementById('region-filter').value; // Get the selected region value
-        const filteredData = filter ? agents.filter(agent => agent.region === filter) : agents; // Filter the data based on the selected region
-        populateTable(filteredData); // Populate the table with the filtered data
-    }
-
-    // Add event listeners to table headers for sorting
-    document.querySelectorAll('.sortable').forEach(header => {
-        header.addEventListener('click', () => {
-            const key = header.getAttribute('data-key');
-            const order = header.getAttribute('data-order') === 'asc' ? 'desc' : 'asc';
-            header.setAttribute('data-order', order);
-            const sortedData = [...agents].sort((a, b) => {
-                if (order === 'asc') {
-                    return a[key] > b[key] ? 1 : -1;
-                } else {
-                    return a[key] < b[key] ? 1 : -1;
-                }
-            });
-            populateTable(sortedData);
-        });
-    });
-</script>
 
 
 	</body>
