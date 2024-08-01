@@ -15,11 +15,21 @@ const registerRegionRoutes = (app) => {
   // Route to get all star regions
   router.get('/all-stars', RegionController.getAllStars);
 
+  // Route to get agents by region
+  router.get('/agents-by-region', RegionController.getAgentsByRegion);
+
+  // Route to get the average rating and fee for a region
+  router.get('/region-avg', RegionController.getRegionAverage);
+
   app.use('/api', router); // Add the router to the app with the /api prefix
 }
 
 // Export the function to register region-related routes
 module.exports = { registerRegionRoutes };
+
+
+
+
 
 
 

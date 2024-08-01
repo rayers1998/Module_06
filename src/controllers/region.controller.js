@@ -6,7 +6,21 @@ const asyncWrapper = require('../shared/util/base-utils');
 
 const createRegion = asyncWrapper(async (req, res) => {
   const region = await Region.create(req.body);
-  res.status(201).json({ msg: 'Region created', data: region });
+
+  // Calculate the total ratings of the top agents
+  const topAgents = await Agent.find({ _id: { $in: region.top_agents } });
+  const totalRatings = topAgents.reduce((sum, agent) => sum + agent.rating, 0);
+
+  // Update the response to include total_ratings within data
+  const response = {
+    msg: 'Region created',
+    data: {
+      ...region.toObject(),
+      total_ratings: totalRatings
+    }
+  };
+
+  res.status(201).json(response);
 });
 
 const getRegion = asyncWrapper(async (req, res) => {
@@ -39,11 +53,54 @@ const getAllStars = asyncWrapper(async (req, res) => {
   });
 });
 
+const getAgentsByRegion = asyncWrapper(async (req, res) => {
+  const { region } = req.query;
+
+  if (!region) {
+    return res.status(400).json({ message: 'Region query parameter is required' });
+  }
+
+  const agents = await Agent.find({ region: region.toLowerCase() });
+
+  if (!agents.length) {
+    return res.status(404).json({ message: `No agents found in region: ${region}` });
+  }
+
+  res.status(200).json({ data: agents });
+});
+
+const getRegionAverage = asyncWrapper(async (req, res) => {
+  const { region } = req.query;
+  const normalizedRegion = region.toLowerCase();
+  const agents = await Agent.find({ region: normalizedRegion });
+
+  if (!agents.length) {
+    return res.status(404).json({ message: `No agents found in region: ${normalizedRegion}` });
+  }
+
+  const sumRatings = agents.reduce((total, { rating }) => total + Number(rating), 0);
+  const sumFees = agents.reduce((total, { fee }) => total + Number(fee), 0);
+  const avgRating = (sumRatings / agents.length).toFixed(2);
+  const avgFee = (sumFees / agents.length).toFixed(2);
+
+  res.json({
+    region: normalizedRegion,
+    average_rating: avgRating,
+    average_fee: avgFee
+  });
+});
+
 module.exports = {
   createRegion,
   getRegion,
   getAllStars,
+  getAgentsByRegion,
+  getRegionAverage,
 };
+
+
+
+
 
 
 

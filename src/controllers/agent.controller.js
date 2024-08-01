@@ -57,13 +57,25 @@ const deleteAgent = asyncWrapper(async (req, res) => {
   res.status(200).json({ message: 'Agent deleted', data: agent });
 });
 
+// Controller function to get agents with rating 100
+const getAllStars = asyncWrapper(async (req, res) => {
+  const agents = await Agent.find({ rating: 100 }); // Retrieve agents with a rating of 100
+  if (!agents.length) {
+    return res.status(404).json({ message: 'No agents with rating of 100 found' });
+  }
+  res.status(200).json({ data: agents });
+});
+
 // Exporting the controller functions
 module.exports = {
   createAgent,
   getAllAgents,
   updateAgentInfo,
   deleteAgent,
+  getAllStars,
 };
+
+
 
 
 
