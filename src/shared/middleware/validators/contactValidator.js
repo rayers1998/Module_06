@@ -1,36 +1,34 @@
 // src\shared\middleware\validators\contactValidator.js
 
-// Contact validator middleware validates the incoming data for the contact form.
+// Contact validator middleware validates the incoming data for the contact form. Includes checks for valid emails and phone #'s,
 
-const { check, validationResult } = require('express-validator'); 
+const { check, validationResult } = require('express-validator');
 
-const validateContactForm = (req, res, next) => {
-const {email, phone} = req.body
-  // Validate the email field
-  check(email)
-    .trim()
+// Validation rules for the contact form
+const contactValidationRules = () => [
+  check('email')
     .isEmail()
     .withMessage('Please provide a valid email address.'),
-
-  // Validate the phone field
-  check(phone)
+  check('phone')
     .trim()
     .notEmpty()
     .withMessage('Phone number is required.')
-    .isLength({ min: 10, max: 15 }) // Ensure the phone number is between 10 and 15 digits
+    .isLength({ min: 10, max: 15 })
     .withMessage('Phone number must be between 10 and 15 digits long.')
     .isMobilePhone('any')
     .withMessage('Please provide a valid phone number.'),
+];
 
-  
-  // Middleware to handle validation errors
-  // (req, res, next) => {
-  //   const errors = validationResult(req);  // Collects all validation errors from the request
-  //   if (!errors.isEmpty()) {  // Checks if there are any validation errors
-  //     return res.status(400).json({ errors: errors.array() });  // If there are errors, responds with status 400 and the errors
-  //   }
-   next();  // If no errors, proceeds to the next middleware or route handler
-  // },
+// Middleware to handle validation result
+const validate = (req, res, next) => {
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    return res.status(400).json({ errors: errors.array() });
+  }
+  next();
 };
 
-module.exports = {validateContactForm};
+module.exports = {
+  contactValidationRules,
+  validate,
+};

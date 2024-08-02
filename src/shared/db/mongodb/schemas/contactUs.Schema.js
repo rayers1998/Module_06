@@ -1,9 +1,7 @@
 // src\shared\db\mongodb\schemas\contactUsSchema.js     
 
-
 // Importing the mongoose module to interact with MongoDB
 const mongoose = require('mongoose');
-
 
 // Create a schema for the contactUs collection
 const Schema = mongoose.Schema;
@@ -47,7 +45,6 @@ const ContactUsSchema = new Schema({
     required: false 
   }
 });
-
 
 module.exports = mongoose.model('ContactUs', ContactUsSchema);
 

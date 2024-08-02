@@ -1,13 +1,13 @@
 // src/controllers/agent.controller.js
 
-// Importing the required modules
 const Agent = require('../shared/db/mongodb/schemas/agent.Schema');
 const asyncWrapper = require('../shared/util/base-utils');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
+const mongoose = require('mongoose');
 
 // Controller function to create a new agent
-const createAgent = asyncWrapper(async (req, res) => {   
+const createAgent = asyncWrapper(async (req, res) => {
   const { password, ...agentData } = req.body;
   const hashedPassword = await bcrypt.hash(password, 10);
   const agent = await Agent.create({ ...agentData, password: hashedPassword });
@@ -16,7 +16,7 @@ const createAgent = asyncWrapper(async (req, res) => {
   const token = jwt.sign(
     { email: agent.email, userId: agent._id },
     process.env.JWT_SECRET,
-    { expiresIn: "1d" } // Token expires in 1 day
+    { expiresIn: "4d" } // Token expires in 4 days
   );
 
   res.status(201).json({ message: 'Agent created', data: agent, token }); // Responding with a success message, the created agent data, and the token
@@ -31,8 +31,13 @@ const getAllAgents = asyncWrapper(async (req, res) => {
 });
 
 // Controller function to update agent information by ID
-const updateAgentInfo = asyncWrapper(async (req, res) => { 
-  const { id: agentID } = req.params;  
+const updateAgentInfo = asyncWrapper(async (req, res) => {
+  const { id: agentID } = req.params;
+
+  if (!mongoose.Types.ObjectId.isValid(agentID)) {
+    return res.status(400).json({ message: `Invalid agent ID: ${agentID}` });
+  }
+
   const agent = await Agent.findByIdAndUpdate(agentID, req.body, {
     new: true,
     runValidators: true
@@ -47,7 +52,12 @@ const updateAgentInfo = asyncWrapper(async (req, res) => {
 
 // Controller function to delete an agent by ID
 const deleteAgent = asyncWrapper(async (req, res) => {
-  const { id: agentID } = req.params; 
+  const { id: agentID } = req.params;
+
+  if (!mongoose.Types.ObjectId.isValid(agentID)) {
+    return res.status(400).json({ message: `Invalid agent ID: ${agentID}` });
+  }
+
   const agent = await Agent.findByIdAndDelete(agentID);
 
   if (!agent) {
@@ -74,8 +84,3 @@ module.exports = {
   deleteAgent,
   getAllStars,
 };
-
-
-
-
-

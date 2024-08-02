@@ -73,12 +73,12 @@ const installPercentFees = {
 
 // CALCULATIONS
 function calcResidentialElev(numFloors, numApts) {
-    const elevatorsRequired = Math.ceil(numApts / numFloors / 6)*Math.ceil(numFloors / 20);
+    const elevatorsRequired = Math.ceil(numApts / numFloors / 6) * Math.ceil(numFloors / 20);
     console.log(elevatorsRequired)
     return elevatorsRequired;
 }
 function calcCommercialElev(numFloors, maxOccupancy) {
-    const elevatorsRequired = Math.ceil((maxOccupancy * numFloors) / 200)*Math.ceil(numFloors / 10);
+    const elevatorsRequired = Math.ceil((maxOccupancy * numFloors) / 200) * Math.ceil(numFloors / 10);
     const freighElevatorsRequired = Math.ceil(numFloors / 10);
     return freighElevatorsRequired + elevatorsRequired;
 }
@@ -133,22 +133,41 @@ function displayBuildingFields(buildingType) {
 }
 
 function displayElvCalcResult(buildingType) {
-    let calculatedElv;
-    if (buildingType == "commercial") {
-        calculatedElv = calcCommercialElev(
-            parseInt(numFloors_input.value),
-            parseInt(maxOcc_input.value)
-        );
-        displayCalcElv_input.value = calculatedElv;
-    } else if (buildingType == "residential") {
-        calculatedElv = calcResidentialElev(
-            parseInt(numFloors_input.value),
-            parseInt(numApt_input.value)
-        );
-        displayCalcElv_input.value = calculatedElv;
+    const queryParams = new URLSearchParams({
+        numberOfFloors: numFloors_input.value,
+        numberOfApartments: numApt_input.value,
+        maximumOccupancy: maxOcc_input.value,
+        elevators: numElevators_input.value,
+        tier: document.querySelector("input[name='product-line']:checked").id
+    });
+
+    fetch(`/calc/${buildingType}?${queryParams.toString()}`)
+        .then(response => response.json())
+        .then(data => {
+            if (data.cost) {
+                displayCalcElv_input.value = data.cost;
+            } else {
+                console.error('Invalid response:', data);
+            }
+        })
+        .catch(error => console.error('Error fetching calculation:', error));
+}
+
+function updatePricingDisplay() {
+    if (!displayCalcElv_input.value) {
+        warning_p.style.display = "block";
+        this.checked = false;
     } else {
-        calculatedElv = numElevators_input.value;
-        displayCalcElv_input.value = calculatedElv;
+        let numElv = parseInt(displayCalcElv_input.value);
+        warning_p.style.display = "none";
+        try {
+            let productLine = document.querySelector(
+                "input[name='product-line']:checked"
+            ).id;
+            displayPricing(productLine, numElv);
+        } catch {
+            // empty: waiting for user to select product line;
+        }
     }
 }
 
@@ -171,24 +190,6 @@ function displayPricing(productLine, numElv) {
         "value",
         formatter.format(totalPrice)
     );
-}
-
-function updatePricingDisplay() {
-    if (!displayCalcElv_input.value) {
-        warning_p.style.display = "block";
-        this.checked = false;
-    } else {
-        let numElv = parseInt(displayCalcElv_input.value);
-        warning_p.style.display = "none";
-        try {
-            let productLine = document.querySelector(
-                "input[name='product-line']:checked"
-            ).id;
-            displayPricing(productLine, numElv);
-        } catch {
-            // empty: waiting for user to select product line;
-        }
-    }
 }
 
 // VALIDATION
